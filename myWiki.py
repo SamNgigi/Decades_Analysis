@@ -24,7 +24,7 @@ class WikiDecadeETL(AbstractETL):
     Getting data specifically from WikiPedia.
     In this case wiki pages on historical events data by decade
     """
-    ignore_sections = {'Pronunciation varieties','Further reading','References','External links'}
+    ignore_sections = {'Pronunciation varieties','Name for the decade','Further reading','References','External links', "Notes"}
     
     root_query = "List of decades, centuries, and millennia"
     
