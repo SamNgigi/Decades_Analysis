@@ -10,7 +10,7 @@ def run(query:str)->WikiDecadeETL:
     return decade
 
 
-def get_combined_df(start:int=1900, stop:int=2020)->dict:
+def get_combinedSects_df(start:int=1900, stop:int=2020)->dict:
     
     lofdcm = WikiDecadeETL()
     drange_links = lofdcm.get_drange_links(start, stop)
@@ -20,13 +20,26 @@ def get_combined_df(start:int=1900, stop:int=2020)->dict:
     combined_df = pd.concat(combined_dict.values(), ignore_index=True)
     
     return combined_df
+
+def get_combinedSumm_df(start:int=1900, stop:int=2020)->dict:
+    
+    lofdcm = WikiDecadeETL()
+    drange_links = lofdcm.get_drange_links(start, stop)
+    
+    combined_dict = {query: run(query).page.summary for query in drange_links.keys()}
+    
+    combined_df = pd.DataFrame.from_dict(tst, orient="index", columns=["summary"])\
+    .reset_index()\
+    .rename(columns={"index": "decade"})
+    
+    return combined_df
         
 
-def save_df(start:int=1900, stop:int=2020, version=1):
+def save_df(start:int=1900, stop:int=2020, version=2, _func=None, annot=''):
 
-    combined_df = get_combined_df(start, stop)
+    combined_df = _func(start, stop)
 
-    combined_df.to_csv(f"data/v{version}_{start}_{stop}s.csv", index=False)
+    combined_df.to_csv(f"data/v{version}_{start}_{stop}s_{annot}.csv", index=False)
 
 
 if __name__ == "__main__":
